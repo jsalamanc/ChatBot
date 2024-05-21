@@ -1,29 +1,21 @@
-import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import { getOpenAiResponse } from '@/lib/openAi';
+import { NextResponse } from 'next/server';
+import OpenAI from 'openai';
 
-const openai = new OpenAI();
 // import axios from "axios";
 
 export async function POST(request: Request) {
   switch (request.method) {
-    case "POST":
+    case 'POST':
       if (
-        request.headers.get("access-control-allow-credentials") ===
+        request.headers.get('access-control-allow-credentials') ===
         process.env.API_KEY
       ) {
-        // try {
-        //   await pinecone.init({
-        //     environment: "gcp-starter",
-        //     apiKey: "237fb3a0-f3b1-45c9-b8fa-45885c2209a9",
-        //   });
-        //   const index = pinecone.Index("chatbot");
-        // } catch (error) {}
-
         try {
           const body = await request.json();
           const data = {
-            model: "gpt-3.5-turbo",
-            messages: body.messages,
+            model: 'gpt-3.5-turbo',
+            messages: body.messages
           };
           let message;
           if (body?.messages.length > 1) {
@@ -36,30 +28,46 @@ export async function POST(request: Request) {
            * envio la pregunta a pinecode para recibir ua respuesta
            */
           const response = await fetch(
-            "https://bipw4npvt8.execute-api.us-east-2.amazonaws.com/prod/embedding-gpt",
+            'https://bipw4npvt8.execute-api.us-east-2.amazonaws.com/prod/embedding-gpt',
             {
-              method: "POST",
+              method: 'POST',
               headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                type_service: "Query",
-                content: "cual es el estado de las especies silvestres?",
-              }),
+                type_service: 'Query',
+                content: message.content
+              })
             }
           );
           const dataRes = await response.json();
-          console.log(dataRes);
+          console.log('dataRes', dataRes.body.response.content);
+          const ND = 'Lo siento, pero no lo sé';
+          const openAiResponse = await getOpenAiResponse([
+            {
+              role: `system`,
+              content: `
+                Eres una IA FAQ, a partir de ahora vas a limitarte a contestar preguntas sobre este contenido: ${dataRes.body.response.content}.
+                NO DES MÁS INFORMACIÓN Y NO SUPONAGAS NADA. No contestes con Respuesta: o según el contenido.
+                Habla como si tú sugieres.
+                Como FAQ debes dar repuestas cortas y precisas y dar la respuesta en en lenguaje sencillo y cercano.
+                Cuando no sepas la respuesta o tengas dudas contesta con la siguiente frase "${ND}""
+              `
+            },
+            ...body.messages
+          ]);
+          console.log('openAiResponse', openAiResponse);
           return NextResponse.json({
-            message: dataRes,
+            message: openAiResponse.content,
+            openAiResponse
           });
         } catch (error) {
-          console.error("Error making API request:", error);
-          return NextResponse.json("Error: Unable to generate response.");
+          console.error('Error making API request:', error);
+          return NextResponse.json('Error: Unable to generate response.');
         }
       } else {
         return NextResponse.json({
-          error: "Unauthorized",
+          error: 'Unauthorized'
         });
       }
       break;

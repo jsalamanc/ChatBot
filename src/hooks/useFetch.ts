@@ -10,16 +10,16 @@ export async function handleFetch(prompt: ChatAssistantProps) {
   const currentUrl = window.location.href;
   const messages = prompt.map((objeto) => {
     const { status, statusText, id, ...restoDelObjeto } = objeto;
+    console.log(objeto);
     return restoDelObjeto;
   });
-  console.log(messages);
   try {
     const res = await fetch(`${currentUrl}api`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "access-control-allow-credentials": `${process.env.NEXT_API_KEY}`,
+        'access-control-allow-credentials': `${process.env.NEXT_API_KEY}`
       },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ messages })
     });
     return res;
   } catch (error) {

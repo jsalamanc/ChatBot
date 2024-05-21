@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { handleFetch } from "@/hooks/useFetch";
-import { ChatAssistantProps } from "@/components/layout/ChatBot.types";
-import { X, Dash } from "react-bootstrap-icons";
-import { InputText } from "./InputText";
-import { Messages } from "./Messages";
+import React, { useState, useEffect } from 'react';
+import { handleFetch } from '@/hooks/useFetch';
+import { ChatAssistantProps } from '@/components/layout/ChatBot.types';
+import { X, Dash } from 'react-bootstrap-icons';
+import { InputText } from './InputText';
+import { Messages } from './Messages';
 
 export const ChatBot = () => {
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>('');
   const [response, setResponse] = useState<ChatAssistantProps>([
     {
-      role: "assistant",
-      content: "¡Hola! ¿En qué puedo ayudarte hoy?",
-      status: 200,
-    },
+      role: 'assistant',
+      content: '¡Hola! ¿En qué puedo ayudarte hoy?',
+      status: 200
+    }
   ]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -21,35 +21,36 @@ export const ChatBot = () => {
     setLoading(true);
     setResponse((prevIndicators) => [
       ...prevIndicators,
-      { role: "user", content: input, status: 200 },
+      { role: 'user', content: input, status: 200 }
     ]);
-    setInput("");
+    setInput('');
   };
   // useEffect encargado de enviar la petición del usuario
   useEffect(() => {
     const fetchAPI = async () => {
+      console.log('responseTEST', response);
       const chatResponse = await handleFetch(response);
       const data = await chatResponse?.json();
       console.log(data);
       setLoading(false);
-      if (data !== "Error: Unable to generate response.") {
+      if (data !== 'Error: Unable to generate response.') {
         setResponse((prevIndicators) => [
           ...prevIndicators,
           {
-            id: data?.message?.id,
-            role: data?.message?.message?.role,
-            content: data?.message?.message?.content,
+            id: data?.message,
+            role: 'assistant',
+            content: data?.message,
             status: chatResponse?.status,
-            statusText: chatResponse?.statusText,
-          },
+            statusText: chatResponse?.statusText
+          }
         ]);
       } else {
         setResponse([
           ...response,
           {
             status: 500,
-            statusText: data,
-          },
+            statusText: data
+          }
         ]);
       }
     };
@@ -62,7 +63,7 @@ export const ChatBot = () => {
     <div
       className="absolute bottom-4 right-4 rounded-lg w-[25rem]"
       style={{
-        contain: "paint",
+        contain: 'paint'
       }}
     >
       <div className="select-none p-3 bg-gray-600 flex items-center justify-between">
