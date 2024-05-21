@@ -14,7 +14,7 @@ export async function handleFetch(prompt: ChatAssistantProps) {
     return restoDelObjeto;
   });
   try {
-    const res = await fetch(`${currentUrl}api`, {
+    const res = await fetch(`${process.env.URL_PAGE || currentUrl}api`, {
       method: 'POST',
       headers: {
         'access-control-allow-credentials': `${process.env.NEXT_API_KEY}`
