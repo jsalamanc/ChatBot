@@ -1,10 +1,10 @@
-import OpenAI from "openai";
-import pinecone from "@pinecone-database/pinecone";
+import OpenAI from 'openai';
+import pinecone from '@pinecone-database/pinecone';
 // import lib from "lib";
 
 const openai = new OpenAI({
   //   apiKey: "sk-proj-X4Dc7VeIS69n6QsWthmVT3BlbkFJJkETZkG3SLI4NO70Vi75",
-  apiKey: "sk-proj-bhcpfYnG0nCyMnucbcnXT3BlbkFJS7JN7G5yX6oAyK8d1Hnl",
+  apiKey: process.env.OPENAI_KEY
 });
 // const pineconeClient = new pinecone.PineconeClient();
 // pineconeClient.apiKey = "3f68e894-ec9a-4511-9837-2968a9521ad6";
@@ -12,8 +12,8 @@ const openai = new OpenAI({
 /* CONVIERTE EL TEXTO A VECTOR */
 export const toEmbeddings = async (text: string) => {
   return await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: [`${text}`],
+    model: 'text-embedding-ada-002',
+    input: [`${text}`]
   });
 };
 
