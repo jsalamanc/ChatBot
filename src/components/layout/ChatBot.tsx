@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { handleFetch } from "@/hooks/useFetch";
-
+import { ChatAssistantProps } from "@/components/layout/ChatBot.types";
 import { X, Dash } from "react-bootstrap-icons";
 import { InputText } from "./InputText";
 import { Messages } from "./Messages";
 
-type ChatAssistantProps = {
-  id?: string;
-  role?: string;
-  content?: string;
-  status?: number;
-  statusText?: string;
-}[];
 export const ChatBot = () => {
   const [input, setInput] = useState<string>("");
   const [response, setResponse] = useState<ChatAssistantProps>([
@@ -37,14 +30,15 @@ export const ChatBot = () => {
     const fetchAPI = async () => {
       const chatResponse = await handleFetch(response);
       const data = await chatResponse?.json();
+      console.log(data);
       setLoading(false);
       if (data !== "Error: Unable to generate response.") {
         setResponse((prevIndicators) => [
           ...prevIndicators,
           {
             id: data?.message?.id,
-            role: data?.message?.choices[0]?.message?.role,
-            content: data?.message?.choices[0]?.message?.content,
+            role: data?.message?.message?.role,
+            content: data?.message?.message?.content,
             status: chatResponse?.status,
             statusText: chatResponse?.statusText,
           },

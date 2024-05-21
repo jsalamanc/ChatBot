@@ -2,18 +2,8 @@ import React from "react";
 import { ChatError } from "@/components/layout/ChatError";
 import { BubbleChat } from "@/components/layout/BubbleChat";
 import { ThreeDots, ChatLeftDots } from "react-bootstrap-icons";
+import { MessagesProps } from "@/components/layout/ChatBot.types";
 
-type ChatAssistantProps = {
-  id?: string;
-  role?: string;
-  content?: string;
-  status?: number;
-  statusText?: string;
-}[];
-type MessagesProps = {
-  response: ChatAssistantProps;
-  loading: boolean;
-};
 export const Messages = ({ response, loading }: MessagesProps) => {
   return (
     <div className="overflow-x-auto bg-gray-800 p-3 h-[22rem] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-600">
@@ -21,7 +11,7 @@ export const Messages = ({ response, loading }: MessagesProps) => {
         <div className="rounded-full bg-red-500 w-[4rem] h-[4rem] flex justify-center items-center">
           <ChatLeftDots className="text-white text-2xl" />
         </div>
-        <h1 className="font-bold">Explora Bot</h1>
+        <h1 className="font-bold">Bot</h1>
         <p className="text-sm">Asistente personal</p>
       </div>
       {response?.map((item, index) => (
@@ -47,7 +37,7 @@ export const Messages = ({ response, loading }: MessagesProps) => {
               <div className="rounded-full bg-red-500 w-[2rem] h-[2rem] flex justify-center items-center">
                 <ChatLeftDots className="text-white text-sm" />
               </div>
-              <h1 className="ml-3 text-[11px]">Explora Bot</h1>
+              <h1 className="ml-3 text-[11px]">Bot</h1>
             </div>
             <div className="mt-[-0.5rem] ml-10 text-sm font-light tracking-wide">
               <div className="flex items-center gap-2">

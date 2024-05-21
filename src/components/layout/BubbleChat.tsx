@@ -21,7 +21,7 @@ export const BubbleChat = ({ message }: ChatAssistantProps) => {
           )}
         </div>
         <h1 className="ml-3 text-[11px]">
-          {message?.role === "assistant" ? "Explora Bot" : "usuario"}
+          {message?.role === "assistant" ? "Bot" : "usuario"}
         </h1>
       </div>
       <div className="mt-[-0.5rem] ml-10 text-sm font-light tracking-wide">

@@ -1,12 +1,8 @@
 import React from "react";
 import { Send } from "react-bootstrap-icons";
+import { InputTextProps } from "@/components/layout/ChatBot.types";
 
-type InputText = {
-  input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>;
-  submit: () => void;
-};
-export const InputText = ({ input, setInput, submit }: InputText) => {
+export const InputText = ({ input, setInput, submit }: InputTextProps) => {
   return (
     <div className="relative bg-gray-800 p-3 flex items-center">
       <textarea
